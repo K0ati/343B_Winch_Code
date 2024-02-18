@@ -9,10 +9,12 @@
 #include "display/lvgl.h" 
 // Enter your autons here!
 AutonFunction autonFunctions[] = {
+    {"Skills Swing Test", skillsSwing},
+    {"Left Quals Rush", leftSideQual},
     {"Skills", skills},
     {"Right Far Rush", rightSideFarRush},
     {"Left Elims", leftSideElims},
-    {"Left Quals", leftSideQual},
+    // {"Left Quals", leftSideQualOld},
     {"Right 6 Ball", rightSide6Ball},
     {"Right 5 Ball", rightSideQuals},
     {"Right 3 Bar", rightSideQualsTouchBar},
@@ -34,6 +36,8 @@ std::string matchGifs[] = {
                 "/usd/getreal.gif", 
                 "/usd/minecraft-sky-parkour.gif", 
             };
+
+
 
 void initialize() {
     ez::ez_template_print();
@@ -91,6 +95,8 @@ void autonomous() {
 /**
  * Runs the operator control code. This function will be started in its own task
  */
+
+
 bool wasR1PressedLast = false;
 bool wasR2PressedLast = false;
 void opcontrol() {
@@ -99,31 +105,31 @@ void opcontrol() {
     pros::Task motorCheckOther(checkOtherMotorsAndReturnTemperature);
 
 
-    // Driver Skills Code (COMMENT OUT when not doing skills)
-    EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
-    pros::Task skillsTask([]() {
-        skills();
-    });
+    // // Driver Skills Code (COMMENT OUT when not doing skills)
+    // EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+    // pros::Task skillsTask([]() {
+    //     skills();
+    // });
 
-    // leftFront.move_velocity(0);
-    // leftBack.move_velocity(0);
-    // leftTop.move_velocity(0);
-    // rightFront.move_velocity(0);
-    // rightBack.move_velocity(0);
-    // rightTop.move_velocity(0);
-    // Wait for any button press to interrupt skills
-    bool interrupted = false;
-    while (!interrupted) {
-        for (int button = pros::E_CONTROLLER_DIGITAL_L1; button <= pros::E_CONTROLLER_DIGITAL_Y; button++) {
-            if (master.get_digital_new_press(static_cast<pros::controller_digital_e_t>(button))) {
-                interrupted = true;
-                skillsTask.remove(); // Stop the skills task
+    // // leftFront.move_velocity(0);
+    // // leftBack.move_velocity(0);
+    // // leftTop.move_velocity(0);
+    // // rightFront.move_velocity(0);
+    // // rightBack.move_velocity(0);
+    // // rightTop.move_velocity(0);
+    // // Wait for any button press to interrupt skills
+    // bool interrupted = false;
+    // while (!interrupted) {
+    //     for (int button = pros::E_CONTROLLER_DIGITAL_L1; button <= pros::E_CONTROLLER_DIGITAL_Y; button++) {
+    //         if (master.get_digital_new_press(static_cast<pros::controller_digital_e_t>(button))) {
+    //             interrupted = true;
+    //             skillsTask.remove(); // Stop the skills task
                 
-                break;
-            }
-        }
-        pros::delay(20); // Small delay to prevent hogging CPU
-    }
+    //             break;
+    //         }
+    //     }
+    //     pros::delay(20); // Small delay to prevent hogging CPU
+    // }
     // END OF SKILLS AUTO CODE
     // ZACH YOU NEED TO LOCK IN ON DRiVING AND CODING AND LOCK ThE FUCK IN WAKEY WAKEY
     EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_COAST);
@@ -164,9 +170,9 @@ void opcontrol() {
 
         if (!isSlap) {
             if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) { 
-                setSlapHang(80); 
+                setSlapHang(127); 
             } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { 
-                setSlapHang(-80); 
+                setSlapHang(-127); 
             } else { 
                 setSlapHang(0);
             }
