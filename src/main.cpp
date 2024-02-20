@@ -9,13 +9,14 @@
 #include "display/lvgl.h" 
 // Enter your autons here!
 AutonFunction autonFunctions[] = {
-    {"Skills Swing Test", skillsSwing},
-    {"Left Quals Rush", leftSideQual},
-    {"Skills", skills},
     {"Right Far Rush", rightSideFarRush},
+    {"Right 6 Ball", rightSide6Ball}, 
+    {"Left Quals Rush", leftSideQual},
+    {"Skills", skills}, 
+    {"Skills Swing Test", skillsSwing},
+    
     {"Left Elims", leftSideElims},
     // {"Left Quals", leftSideQualOld},
-    {"Right 6 Ball", rightSide6Ball},
     {"Right 5 Ball", rightSideQuals},
     {"Right 3 Bar", rightSideQualsTouchBar},
 };
@@ -78,12 +79,17 @@ void disabled() {}
  * Runs after initialize(), and before autonomous when connected to the Field
 
  */
-void competition_initialize() {}
+void competition_initialize() {
+    ezTempChassisInits();
+    intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
  */
 void autonomous() {
+    ezTempChassisInits();
+    intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     EzTempChassis.pid_targets_reset(); // Resets PID targets to 0
     EzTempChassis.drive_imu_reset(); // Reset gyro position to 0
     EzTempChassis.drive_sensor_reset(); // Reset drive sensors to 0
@@ -105,7 +111,7 @@ void opcontrol() {
     pros::Task motorCheckOther(checkOtherMotorsAndReturnTemperature);
 
 
-    // // Driver Skills Code (COMMENT OUT when not doing skills)
+    // Driver Skills Code (COMMENT OUT when not doing skills)
     // EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
     // pros::Task skillsTask([]() {
     //     skills();
@@ -131,8 +137,11 @@ void opcontrol() {
     //     pros::delay(20); // Small delay to prevent hogging CPU
     // }
     // END OF SKILLS AUTO CODE
+
+
     // ZACH YOU NEED TO LOCK IN ON DRiVING AND CODING AND LOCK ThE FUCK IN WAKEY WAKEY
     EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_COAST);
+    bool isDriveOnHold = false;
 	while (true) {
         // tank_drive( 
             
@@ -188,9 +197,17 @@ void opcontrol() {
             intake = 0; 
         }   
 
-        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { 
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { 
             motorCheckDT.suspend(); 
             motorCheckOther.suspend(); 
+        }
+
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { 
+            EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+        }
+
+        if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+            EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_COAST);
         }
 
 		pros::delay(ez::util::DELAY_TIME);
@@ -198,4 +215,4 @@ void opcontrol() {
 }
 
 int matchGifsSize = sizeof(matchGifs) / sizeof(matchGifs[0]);
-int calibrationGifsSize = sizeof(calibrationGifs) / sizeof(calibrationGifs[0]);
+int calibrationGifsSize = sizeof(calibrationGifs) / sizeof(calibrationGifs[0]); //lol
