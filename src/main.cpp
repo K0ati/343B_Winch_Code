@@ -9,6 +9,8 @@
 #include "display/lvgl.h" 
 // Enter your autons here!
 // Uh Guys be for serious
+// Thaddeus was here.
+
 AutonFunction autonFunctions[] = {
     {"Right 6 Ball", rightSide6Ball}, 
 
