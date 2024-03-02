@@ -8,15 +8,13 @@
 #include "screen.hpp"
 #include "display/lvgl.h" 
 // Enter your autons here!
-// Uh Guys be for serious
-// Thaddeus was here.
 
 AutonFunction autonFunctions[] = {
     {"Right 6 Ball", rightSide6Ball}, 
 
     {"Right Far Rush", rightSideFarRush},
     {"Left Quals Rush", leftSideQual},
-    {"Skills", skills}, 
+    
     {"Skills Swing Test", skillsSwing},
     
     {"Left Elims", leftSideElims},
@@ -116,30 +114,30 @@ void opcontrol() {
 
 
     // Driver Skills Code (COMMENT OUT when not doing skills)
-    // EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
-    // pros::Task skillsTask([]() {
-    //     skills();
-    // });
+    EzTempChassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+    pros::Task skillsTask([]() {
+        skills();
+    });
 
-    // // leftFront.move_velocity(0);
-    // // leftBack.move_velocity(0);
-    // // leftTop.move_velocity(0);
-    // // rightFront.move_velocity(0);
-    // // rightBack.move_velocity(0);
-    // // rightTop.move_velocity(0);
-    // // Wait for any button press to interrupt skills
-    // bool interrupted = false;
-    // while (!interrupted) {
-    //     for (int button = pros::E_CONTROLLER_DIGITAL_L1; button <= pros::E_CONTROLLER_DIGITAL_Y; button++) {
-    //         if (master.get_digital_new_press(static_cast<pros::controller_digital_e_t>(button))) {
-    //             interrupted = true;
-    //             skillsTask.remove(); // Stop the skills task
+    // leftFront.move_velocity(0);
+    // leftBack.move_velocity(0);
+    // leftTop.move_velocity(0);
+    // rightFront.move_velocity(0);
+    // rightBack.move_velocity(0);
+    // rightTop.move_velocity(0);
+    // Wait for any button press to interrupt skills
+    bool interrupted = false;
+    while (!interrupted) {
+        for (int button = pros::E_CONTROLLER_DIGITAL_L1; button <= pros::E_CONTROLLER_DIGITAL_Y; button++) {
+            if (master.get_digital_new_press(static_cast<pros::controller_digital_e_t>(button))) {
+                interrupted = true;
+                skillsTask.remove(); // Stop the skills task
                 
-    //             break;
-    //         }
-    //     }
-    //     pros::delay(20); // Small delay to prevent hogging CPU
-    // }
+                break;
+            }
+        }
+        pros::delay(20); // Small delay to prevent hogging CPU
+    }
     // END OF SKILLS AUTO CODE
 
 
