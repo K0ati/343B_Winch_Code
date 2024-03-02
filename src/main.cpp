@@ -8,10 +8,11 @@
 #include "screen.hpp"
 #include "display/lvgl.h" 
 // Enter your autons here!
+
 AutonFunction autonFunctions[] = {
-    {"Skills", skills}, 
-    {"Right Far Rush", rightSideFarRush},
     {"Right 6 Ball", rightSide6Ball}, 
+
+    {"Right Far Rush", rightSideFarRush},
     {"Left Quals Rush", leftSideQual},
     
     {"Skills Swing Test", skillsSwing},
