@@ -8,6 +8,7 @@
 #include "screen.hpp"
 #include "display/lvgl.h" 
 // Enter your autons here!
+// Uh Guys be for serious
 AutonFunction autonFunctions[] = {
     {"Right Far Rush", rightSideFarRush},
     {"Right 6 Ball", rightSide6Ball}, 
